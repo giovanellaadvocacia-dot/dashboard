@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Registro de Gastos do Casal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/modern-normalize/2.0.0/modern-normalize.min.css" integrity="sha512-q3HtnAh/1m+wxLBzME2YkdE+5EYXPLkZX31lrT7xGTFeoJEB6Digw1VE3DybZ0SqnX+0Gooy2cugl+c2Ik6x5Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        :root {
+            color-scheme: light;
+            font-size: 16px;
+            --brand-500: #5b21b6;
+            --brand-400: #7c3aed;
+            --brand-300: #a855f7;
+            --gray-900: #111827;
+            --gray-700: #374151;
+            --gray-100: #f3f4f6;
+            --gray-50: #f9fafb;
+            --success: #047857;
+            --error: #dc2626;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(180deg, #ede9fe 0%, #f9fafb 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding: clamp(1.5rem, 5vw, 3rem);
+            color: var(--gray-900);
+        }
+
+        main {
+            width: min(960px, 100%);
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 30px 80px rgba(91, 33, 182, 0.15);
+            overflow: hidden;
+        }
+
+        header {
+            background: radial-gradient(circle at top right, var(--brand-300), var(--brand-500));
+            padding: clamp(2rem, 6vw, 3.5rem);
+            color: white;
+        }
+
+        header h1 {
+            font-size: clamp(1.875rem, 4vw, 2.5rem);
+            margin-bottom: 0.75rem;
+        }
+
+        header p {
+            font-size: clamp(1rem, 2vw, 1.125rem);
+            max-width: 32rem;
+            line-height: 1.5;
+            opacity: 0.9;
+        }
+
+        form {
+            display: grid;
+            gap: 1.5rem;
+            padding: clamp(2rem, 6vw, 3.5rem);
+            background: white;
+        }
+
+        fieldset {
+            border: none;
+            padding: 0;
+            display: grid;
+            gap: 1.25rem;
+        }
+
+        legend {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--brand-500);
+        }
+
+        .field {
+            display: grid;
+            gap: 0.5rem;
+        }
+
+        label {
+            font-weight: 600;
+            color: var(--gray-700);
+        }
+
+        input,
+        select,
+        textarea {
+            appearance: none;
+            width: 100%;
+            padding: 0.85rem 1rem;
+            border: 1px solid rgba(17, 24, 39, 0.1);
+            border-radius: 12px;
+            font: inherit;
+            line-height: 1.4;
+            transition: border-color 120ms ease, box-shadow 120ms ease, transform 120ms ease;
+            background-color: var(--gray-50);
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: var(--brand-400);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
+            background-color: white;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .people {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 0.75rem;
+        }
+
+        .person {
+            position: relative;
+        }
+
+        .person input {
+            position: absolute;
+            opacity: 0;
+        }
+
+        .person label {
+            display: block;
+            padding: 0.85rem 1rem;
+            border-radius: 14px;
+            text-align: center;
+            border: 2px solid transparent;
+            background: var(--gray-50);
+            cursor: pointer;
+            transition: transform 120ms ease, box-shadow 120ms ease, border-color 120ms ease;
+        }
+
+        .person input:focus + label,
+        .person input:checked + label {
+            border-color: var(--brand-400);
+            background: white;
+            box-shadow: 0 10px 30px rgba(124, 58, 237, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .actions {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        button[type="submit"] {
+            padding: 1rem 1.5rem;
+            border: none;
+            border-radius: 14px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: white;
+            background: linear-gradient(135deg, var(--brand-400), var(--brand-500));
+            cursor: pointer;
+            transition: transform 120ms ease, box-shadow 120ms ease;
+        }
+
+        button[type="submit"]:hover,
+        button[type="submit"]:focus {
+            transform: translateY(-1px);
+            box-shadow: 0 16px 40px rgba(124, 58, 237, 0.25);
+            outline: none;
+        }
+
+        button[type="submit"]:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .status {
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            min-height: 1.5rem;
+        }
+
+        .status[data-state="success"] {
+            color: var(--success);
+        }
+
+        .status[data-state="error"] {
+            color: var(--error);
+        }
+
+        .status .spinner {
+            display: inline-block;
+            width: 1.25rem;
+            height: 1.25rem;
+            border: 3px solid rgba(124, 58, 237, 0.2);
+            border-top-color: var(--brand-400);
+            border-radius: 50%;
+            animation: spin 0.75s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        footer {
+            padding: 1.5rem 3.5rem 3rem;
+            border-top: 1px solid rgba(17, 24, 39, 0.08);
+            background: var(--gray-50);
+        }
+
+        footer h2 {
+            font-size: 1.125rem;
+            margin-bottom: 0.75rem;
+            color: var(--gray-900);
+        }
+
+        footer ol {
+            display: grid;
+            gap: 0.75rem;
+            counter-reset: steps;
+            padding-left: 1.25rem;
+        }
+
+        footer li {
+            line-height: 1.5;
+        }
+
+        .note {
+            font-size: 0.9rem;
+            color: var(--gray-700);
+            background: rgba(91, 33, 182, 0.08);
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            margin-top: 1.5rem;
+        }
+
+        @media (max-width: 640px) {
+            body {
+                padding: 1.25rem;
+            }
+
+            main {
+                border-radius: 20px;
+            }
+
+            form {
+                padding: 1.75rem;
+            }
+
+            footer {
+                padding: 1.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <header>
+            <h1>Registro de Gastos do Lar</h1>
+            <p>Preencha o formulário abaixo para lançar uma nova despesa e sincronizar com sua planilha no Google Sheets. Cada envio adiciona uma nova linha automaticamente.</p>
+        </header>
+
+        <form id="expense-form" autocomplete="off">
+            <fieldset>
+                <legend>Quem pagou?</legend>
+                <div class="people" id="people-options" data-people='["Ana","Bruno"]'>
+                    <!-- As opções são preenchidas dinamicamente pelo script -->
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Detalhes do gasto</legend>
+                <div class="field">
+                    <label for="date">Data</label>
+                    <input type="date" id="date" name="date" required />
+                </div>
+
+                <div class="field">
+                    <label for="category">Categoria</label>
+                    <select id="category" name="category" required>
+                        <option value="" disabled selected>Selecione uma categoria</option>
+                        <option value="Mercado">Mercado</option>
+                        <option value="Moradia">Moradia</option>
+                        <option value="Transporte">Transporte</option>
+                        <option value="Lazer">Lazer</option>
+                        <option value="Saúde">Saúde</option>
+                        <option value="Outros">Outros</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="description">Descrição</label>
+                    <input type="text" id="description" name="description" placeholder="Ex.: Compras da semana" required />
+                </div>
+
+                <div class="field">
+                    <label for="amount">Valor (R$)</label>
+                    <input type="number" id="amount" name="amount" inputmode="decimal" step="0.01" min="0" placeholder="0,00" required />
+                </div>
+
+                <div class="field">
+                    <label for="notes">Observações (opcional)</label>
+                    <textarea id="notes" name="notes" placeholder="Ex.: Inclui produtos de limpeza"></textarea>
+                </div>
+            </fieldset>
+
+            <div class="actions">
+                <button type="submit">Salvar gasto na planilha</button>
+                <p class="status" id="status" role="status" aria-live="polite"></p>
+            </div>
+        </form>
+
+        <footer>
+            <h2>Como configurar a integração com Google Sheets</h2>
+            <ol>
+                <li>Abra a planilha do Google Sheets onde deseja registrar os gastos e clique em <strong>Extensões &gt; Apps Script</strong>.</li>
+                <li>No editor que abrir, substitua o conteúdo do arquivo <code>Code.gs</code> pelo código do arquivo <code>code.gs</code> deste projeto.</li>
+                <li>Salve o projeto, clique em <strong>Implantar &gt; Nova implantação</strong>, escolha o tipo <strong>Aplicativo da web</strong>, configure o acesso como <strong>Qualquer pessoa</strong> e confirme a implantação. Copie a URL da web gerada.</li>
+                <li>Edite o arquivo <code>script.js</code> (ou a seção correspondente neste HTML) e cole a URL copiada na constante <code>scriptURL</code>. Salve as alterações.</li>
+                <li>Hospede este arquivo <code>index.html</code> (e <code>script.js</code>, se separado) em qualquer lugar ou abra-o diretamente no navegador. Preencha o formulário e envie para registrar os gastos.</li>
+            </ol>
+
+            <div class="note">
+                Você pode personalizar os nomes exibidos nas opções "Quem pagou?" editando o atributo <code>data-people</code> do elemento com id <code>people-options</code> ou ajustando diretamente no script.
+            </div>
+        </footer>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>
